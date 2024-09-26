@@ -20,6 +20,9 @@ DomainErrorTranslator._directories = {
   'NEW_THREAD.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new thread, payload not correct'),
   'NEW_THREAD.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new thread, payload property have wrong data type',),
   'NEW_THREAD.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('title exceed 50 character'),
+  'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new comment, payload not correct'),
+  'NEW_COMMENT.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new comment, payload property have wrong data type',
+  ),
 };
 
 module.exports = DomainErrorTranslator;
