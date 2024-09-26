@@ -24,14 +24,12 @@ describe('/threads endpoint', () => {
 
   describe('when POST /threads', () => {
     it('should response 201 and return correct added thread', async () => {
-      // Arrange
       const server = await createServer(container);
       const requestPayload = {
         title: 'First Thread',
         body: 'This is first thread',
       };
 
-      // Add account
       await server.inject({
         method: 'POST',
         url: '/users',
@@ -46,7 +44,7 @@ describe('/threads endpoint', () => {
         username: 'dicoding',
         password: 'secret',
       };
-      // login
+
       const auth = await server.inject({
         method: 'POST',
         url: '/authentications',
@@ -57,7 +55,6 @@ describe('/threads endpoint', () => {
         data: { accessToken },
       } = JSON.parse(auth.payload);
 
-      // Action
       const response = await server.inject({
         method: 'POST',
         url: '/threads',
@@ -67,7 +64,6 @@ describe('/threads endpoint', () => {
         },
       });
 
-      //Assert
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(201);
       expect(responseJson.status).toEqual('success');
@@ -75,7 +71,6 @@ describe('/threads endpoint', () => {
     });
 
     it('should response 401 if no authorization', async () => {
-      // Arrange
       const server = await createServer(container);
       const requestPayload = {
         title: 'First Thread',
@@ -83,7 +78,6 @@ describe('/threads endpoint', () => {
       };
       const accessToken = 'wrongtoken';
 
-      // Action
       const response = await server.inject({
         method: 'POST',
         url: '/threads',
@@ -93,19 +87,17 @@ describe('/threads endpoint', () => {
         },
       });
 
-      // Assert
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(401);
       expect(responseJson.error).toEqual('Unauthorized');
     });
 
     it('should response 400 if bad payload', async () => {
-      // Arrange
       const server = await createServer(container);
       const requestPayload = {
         title: 'First Thread',
       };
-      // Add account
+
       await server.inject({
         method: 'POST',
         url: '/users',
@@ -120,7 +112,7 @@ describe('/threads endpoint', () => {
         username: 'dicoding',
         password: 'secret',
       };
-      // login
+
       const auth = await server.inject({
         method: 'POST',
         url: '/authentications',
@@ -131,7 +123,6 @@ describe('/threads endpoint', () => {
         data: { accessToken },
       } = JSON.parse(auth.payload);
 
-      // Action
       const response = await server.inject({
         method: 'POST',
         url: '/threads',
@@ -141,7 +132,6 @@ describe('/threads endpoint', () => {
         },
       });
 
-      // Assert
       const responseJson = JSON.parse(response.payload);
       expect(response.statusCode).toEqual(400);
       expect(responseJson.status).toEqual('fail');
