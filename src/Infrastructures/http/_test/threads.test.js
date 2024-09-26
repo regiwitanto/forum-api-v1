@@ -3,10 +3,8 @@ const {
   addUserOption,
   addThreadOption,
   addAuthOption,
-  addCommentOption,
-  addCommentReplyOption,
 } = require('../../../../tests/ServerInjectionFunctionHelper');
-const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
