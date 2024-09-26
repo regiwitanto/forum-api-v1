@@ -55,7 +55,6 @@ const createServer = async (container) => {
   ]);
 
   server.ext('onPreResponse', (request, h) => {
-    console.log("🚀 ~ file: createServer.js:58 ~ server.ext ~ h:", h)
     // mendapatkan konteks response dari request
     const { response } = request;
 
