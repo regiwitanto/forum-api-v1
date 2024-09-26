@@ -1,9 +1,9 @@
-const ThreadsTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const NewComment = require('../../../Domains/comments/entities/NewComment');
-const CommentRepositoryPostgress = require('../CommentRepositoryPostgres');
+const CommentRepositoryPostgres = require('../CommentRepositoryPostgres');
 const AddedComment = require('../../../Domains/comments/entities/AddedComment');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
@@ -34,7 +34,7 @@ describe('CommentRepositoryPostgres', () => {
       });
 
       const fakeIdGenerator = () => '222';
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         fakeIdGenerator
       );
@@ -58,7 +58,7 @@ describe('CommentRepositoryPostgres', () => {
       });
 
       const fakeIdGenerator = () => '222';
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         fakeIdGenerator
       );
@@ -81,7 +81,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('getCommentById', () => {
     it('should return NotFoundError when comment not found', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );
@@ -97,7 +97,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );
@@ -129,7 +129,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );
@@ -142,7 +142,7 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should return empty array if there is no comment correctly', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );
@@ -164,7 +164,7 @@ describe('CommentRepositoryPostgres', () => {
         thread_id: threadId,
         is_delete: false,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );
@@ -183,7 +183,7 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should return InvariantError when failed to delete comment', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgress(
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
         {}
       );

@@ -21,8 +21,15 @@ DomainErrorTranslator._directories = {
   'NEW_THREAD.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new thread, payload property have wrong data type',),
   'NEW_THREAD.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('title exceed 50 character'),
   'NEW_COMMENT.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new comment, payload not correct'),
-  'NEW_COMMENT.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new comment, payload property have wrong data type',
-  ),
+  'NEW_COMMENT.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new comment, payload property have wrong data type',),
+  'NEW_COMMENT_REPLY.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new comment, payload not correct'),
+  'NEW_COMMENT_REPLY.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new comment, payload property have wrong data type',),
+  'THREAD_DETAILS.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new thread details payload not correct',),
+  'THREAD_DETAILS.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new thread details, payload property have wrong data type',),
+  'COMMENT_DETAILS.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new COMMENT details payload not correct',),
+  'COMMENT_DETAILS.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new COMMENT details, payload property have wrong data type',),
+  'COMMENT_REPLY_DETAILS.NOT_CONTAIN_NEEDED_PROPERTY': new InvariantError('cannot make a new COMMENT REPLY details payload not correct',),
+  'COMMENT_REPLY_DETAILS.PROPERTY_HAVE_WRONG_DATA_TYPE': new InvariantError('cannot make a new COMMENT REPLY details, payload property have wrong data type',),
 };
 
 module.exports = DomainErrorTranslator;

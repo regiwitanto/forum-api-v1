@@ -1,5 +1,5 @@
 const pool = require('../../database/postgres/pool');
-const ThreadTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const {
   injection,

@@ -3,7 +3,7 @@ const NotFoundError = require('../../Commons/exceptions/NotFoundError');
 const CommentRepository = require('../../Domains/comments/CommentRepository');
 const AddedComment = require('../../Domains/comments/entities/AddedComment');
 
-class CommentRepositoryPostgress extends CommentRepository {
+class CommentRepositoryPostgres extends CommentRepository {
   constructor(pool, idGenerator) {
     super();
     this._pool = pool;
@@ -77,4 +77,4 @@ class CommentRepositoryPostgress extends CommentRepository {
   }
 }
 
-module.exports = CommentRepositoryPostgress;
+module.exports = CommentRepositoryPostgres;
