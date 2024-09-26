@@ -1,6 +1,6 @@
 const CommentRepository = require('../../../../Domains/comments/CommentRepository');
 const OwnerValidator = require('../../../security/OwnerValidator');
-const DeleteCommentUseCase = require('../DeleteCommentUseCase');
+const DeleteCommentUseCase = require('../DeleteCommentUseCase.js');
 
 describe('DeleteCommentUseCase', () => {
   it('should orchestrating the delete comment', async () => {
