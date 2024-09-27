@@ -138,4 +138,67 @@ describe('/threads endpoint', () => {
       );
     });
   });
+
+  describe('when GET /threads/{threadsId}', () => {
+    it('it should display the right thread details', async () => {
+      const commentPayload = {
+        content: 'This is comment',
+      };
+
+      const threadPayload = {
+        title: 'First Thread',
+        body: 'This is first thread',
+      };
+
+      const userPayload = {
+        username: 'dicoding',
+        password: 'secret',
+        fullname: 'Dicoding Indonesia',
+      };
+
+      const loginPayload = {
+        username: 'dicoding',
+        password: 'secret',
+      };
+
+      const requestPayload = {
+        content: 'This is reply',
+      };
+
+      const mockThreadDetails = {};
+
+      const server = await createServer(container);
+
+      await injection(server, addUserOption(userPayload));
+      const auth = await injection(server, addAuthOption(loginPayload));
+      const authToken = JSON.parse(auth.payload)?.data?.accessToken;
+
+      const thread = await injection(
+        server,
+        addThreadOption(threadPayload, authToken)
+      );
+      const threadId = JSON.parse(thread.payload)?.data?.addedThread.id;
+
+      const comment = await injection(
+        server,
+        addCommentOption(commentPayload, authToken, threadId)
+      );
+      const commentId = JSON.parse(comment.payload)?.data?.addedComment.id;
+
+      await injection(
+        server,
+        addCommentReplyOption(requestPayload, authToken, threadId, commentId)
+      );
+
+      const response = await server.inject({
+        method: 'GET',
+        url: `/threads/${threadId}`,
+      });
+
+      const responseJson = JSON.parse(response.payload);
+      expect(response.statusCode).toEqual(200);
+      expect(responseJson.status).toEqual('success');
+      expect(responseJson.data.thread).toBeDefined();
+    });
+  });
 });
