@@ -37,6 +37,16 @@ const ServerInjectionFunctionHelper = {
       },
     };
   },
+  addCommentReplyOption(payload, auth, threadId, commentId) {
+    return {
+      method: 'POST',
+      url: `/threads/${threadId}/comments/${commentId}/replies`,
+      payload: payload,
+      headers: {
+        Authorization: `Bearer ${auth}`,
+      },
+    };
+  },
 };
 
 module.exports = ServerInjectionFunctionHelper;

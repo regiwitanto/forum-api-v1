@@ -3,6 +3,8 @@ const {
   addUserOption,
   addThreadOption,
   addAuthOption,
+  addCommentOption,
+  addCommentReplyOption,
 } = require('../../../../tests/ServerInjectionFunctionHelper');
 const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
