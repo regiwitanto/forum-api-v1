@@ -19,6 +19,8 @@ const CommentRepository = require('../Domains/comments/CommentRepository');
 const CommentRepositoryPostgres = require('./repository/CommentRepositoryPostgres');
 const OwnerValidator = require('../Applications/security/OwnerValidator');
 const OwnerValidatorManager = require('./security/OwnerValidatorManager');
+const CommentReplyRepository = require('../Domains/comment_replies/CommentReplyRepository');
+const CommentReplyRepositoryPostgres = require('./repository/CommentReplyRepositoryPostgres');
 
 // use case
 const AddUserUseCase = require('../Applications/use_case/users/AddUserUseCase');
@@ -261,6 +263,10 @@ container.register([
         },
         {
           name: 'commentRepository',
+          internal: CommentRepository.name,
+        },
+        {
+          name: 'commentReplyRepository',
           internal: CommentRepository.name,
         },
       ],
