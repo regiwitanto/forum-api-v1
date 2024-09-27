@@ -12,7 +12,7 @@ const routes = (handler) => [
     path: '/threads/{threadId}/comments/{commentId}',
     handler: handler.deleteCommentHandler,
     options: {
-      auth: 'forum_jwt',
+      auth: 'forumapi_jwt',
     },
   },
 ];

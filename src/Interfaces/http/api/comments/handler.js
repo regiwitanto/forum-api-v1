@@ -5,6 +5,7 @@ class CommentHandler {
   constructor(container) {
     this._container = container;
     this.postCommentHandler = this.postCommentHandler.bind(this);
+    this.deleteCommentHandler = this.deleteCommentHandler.bind(this);
   }
 
   async postCommentHandler(request, h) {

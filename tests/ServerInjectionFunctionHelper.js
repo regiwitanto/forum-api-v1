@@ -3,7 +3,6 @@ const ServerInjectionFunctionHelper = {
   async injection(server, options) {
     return await server.inject(options);
   },
-
   addUserOption(payload) {
     return {
       method: 'POST',
@@ -11,7 +10,6 @@ const ServerInjectionFunctionHelper = {
       payload: payload,
     };
   },
-
   addAuthOption(payload) {
     return {
       method: 'POST',
@@ -19,11 +17,20 @@ const ServerInjectionFunctionHelper = {
       payload: payload,
     };
   },
-
   addThreadOption(payload, auth) {
     return {
       method: 'POST',
       url: '/threads',
+      payload: payload,
+      headers: {
+        Authorization: `Bearer ${auth}`,
+      },
+    };
+  },
+  addCommentOption(payload, auth, threadId) {
+    return {
+      method: 'POST',
+      url: `/threads/${threadId}/comments`,
       payload: payload,
       headers: {
         Authorization: `Bearer ${auth}`,
