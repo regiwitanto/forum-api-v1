@@ -32,6 +32,7 @@ const RefreshAuthenticationUseCase = require('../Applications/use_case/authentic
 const AddThreadUseCase = require('../Applications/use_case/threads/AddThreadUseCase');
 const AddCommentUseCase = require('../Applications/use_case/comments/AddCommentUseCase');
 const DeleteCommentUseCase = require('../Applications/use_case/comments/DeleteCommentUseCase');
+const GetDetailsThreadUseCase = require('../Applications/use_case/threads/GetDetailsThreadUseCase');
 
 // creating container
 const container = createContainer();
@@ -240,6 +241,27 @@ container.register([
         {
           name: 'ownerValidator',
           internal: OwnerValidator.name,
+        },
+      ],
+    },
+  },
+  {
+    key: GetDetailsThreadUseCase.name,
+    Class: GetDetailsThreadUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+        {
+          name: 'commentRepository',
+          internal: CommentRepository.name,
         },
       ],
     },
