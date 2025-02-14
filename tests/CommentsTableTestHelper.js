@@ -11,7 +11,7 @@ const CommentsTableTestHelper = {
     is_delete = false,
   }) {
     const query = {
-      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) Returning id, content, user_id',
+      text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, user_id',
       values: [id, content, created_at, user_id, thread_id, is_delete],
     };
 

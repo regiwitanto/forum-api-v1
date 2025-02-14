@@ -3,46 +3,34 @@ const OwnerValidator = require('../../../security/OwnerValidator');
 const DeleteCommentUseCase = require('../DeleteCommentUseCase.js');
 
 describe('DeleteCommentUseCase', () => {
-  it('should orchestrating the delete comment', async () => {
-    const useCaseCommentId = 'comment-212';
-    const useCaseThreadId = 'thread-212';
-    const useCaseCredential = 'user-212';
+  it('should orchestrate the deletion of a comment', async () => {
+    const commentId = 'comment-212';
+    const threadId = 'thread-212';
+    const userId = 'user-212';
 
-    const commentAvailable = {
-      id: useCaseCommentId,
-      user_id: useCaseCredential,
+    const existingComment = {
+      id: commentId,
+      user_id: userId,
     };
 
-    const mockCommentRepository = new CommentRepository();
-    const mockOwnerValidator = new OwnerValidator();
+    const commentRepo = new CommentRepository();
+    const ownerValidator = new OwnerValidator();
 
-    mockCommentRepository.getCommentById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(commentAvailable));
-    mockOwnerValidator.verifyOwner = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentRepository.deleteComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+    commentRepo.getCommentById = jest.fn().mockResolvedValue(existingComment);
+    ownerValidator.verifyOwner = jest.fn().mockResolvedValue();
+    commentRepo.deleteComment = jest.fn().mockResolvedValue();
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
-      commentRepository: mockCommentRepository,
-      ownerValidator: mockOwnerValidator,
+      commentRepository: commentRepo,
+      ownerValidator: ownerValidator,
     });
 
-    await deleteCommentUseCase.execute(
-      useCaseCommentId,
-      useCaseThreadId,
-      useCaseCredential
-    );
+    await deleteCommentUseCase.execute(commentId, threadId, userId);
 
-    expect(mockCommentRepository.getCommentById).toBeCalledWith(
-      useCaseCommentId
-    );
-    expect(mockOwnerValidator.verifyOwner).toBeCalledWith(
-      useCaseCredential,
-      commentAvailable.user_id,
+    expect(commentRepo.getCommentById).toBeCalledWith(commentId);
+    expect(ownerValidator.verifyOwner).toBeCalledWith(
+      userId,
+      existingComment.user_id,
       'comment'
     );
   });

@@ -29,10 +29,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('addComment function', () => {
     it('should persist added comment', async () => {
-      const newComment = new NewComment({
-        content: 'This is a comment',
-      });
-
+      const newComment = new NewComment({ content: 'This is a comment' });
       const fakeIdGenerator = () => '222';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
@@ -48,15 +45,11 @@ describe('CommentRepositoryPostgres', () => {
       const comment = await CommentsTableTestHelper.getCommentById(
         'comment-222'
       );
-
       expect(comment).toHaveLength(1);
     });
 
     it('should return added comment correctly', async () => {
-      const newComment = new NewComment({
-        content: 'This is a comment',
-      });
-
+      const newComment = new NewComment({ content: 'This is a comment' });
       const fakeIdGenerator = () => '222';
       const commentRepositoryPostgres = new CommentRepositoryPostgres(
         pool,
@@ -81,10 +74,7 @@ describe('CommentRepositoryPostgres', () => {
 
   describe('getCommentById', () => {
     it('should return NotFoundError when comment not found', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await expect(
         commentRepositoryPostgres.getCommentById('wrong-comment')
@@ -97,10 +87,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       const comment = await commentRepositoryPostgres.getCommentById(
         'comment-333'
@@ -129,10 +116,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       const comments = await commentRepositoryPostgres.getCommentByThreadId(
         threadId
@@ -142,16 +126,13 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should return empty array if there is no comment correctly', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       const comments = await commentRepositoryPostgres.getCommentByThreadId(
         threadId
       );
 
-      expect(Array.isArray(comments)).toBeTruthy;
+      expect(Array.isArray(comments)).toBeTruthy();
       expect(comments).toHaveLength(0);
     });
   });
@@ -164,10 +145,7 @@ describe('CommentRepositoryPostgres', () => {
         thread_id: threadId,
         is_delete: false,
       });
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await commentRepositoryPostgres.deleteComment(
         'comment-333',
@@ -183,10 +161,7 @@ describe('CommentRepositoryPostgres', () => {
     });
 
     it('should return InvariantError when failed to delete comment', async () => {
-      const commentRepositoryPostgres = new CommentRepositoryPostgres(
-        pool,
-        {}
-      );
+      const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
       await expect(
         commentRepositoryPostgres.deleteComment(

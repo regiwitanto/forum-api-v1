@@ -1,7 +1,7 @@
 const CommentDetails = require('../CommentDetails');
 
-describe('a CommentDetails', () => {
-  it('should throw error when payload did not contain right property', () => {
+describe('CommentDetails Entity', () => {
+  it('should throw an error when payload does not contain required properties', () => {
     const payload = {
       content: 'something',
       date: 'something',
@@ -14,13 +14,13 @@ describe('a CommentDetails', () => {
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
+  it('should throw an error when payload contains properties with wrong data types', () => {
     const payload = {
       id: 'something',
       content: 'something',
       date: 'something',
       username: 'something',
-      replies: '[]',
+      replies: '[]', // Should be an array, not a string
     };
 
     expect(() => new CommentDetails(payload)).toThrowError(
@@ -28,7 +28,7 @@ describe('a CommentDetails', () => {
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
+  it('should create CommentDetails object correctly when payload is valid', () => {
     const payload = {
       id: 'something',
       content: 'something',
@@ -38,6 +38,12 @@ describe('a CommentDetails', () => {
     };
 
     const commentDetails = new CommentDetails(payload);
-    expect(commentDetails).toBeDefined();
+
+    expect(commentDetails).toBeInstanceOf(CommentDetails);
+    expect(commentDetails.id).toEqual(payload.id);
+    expect(commentDetails.content).toEqual(payload.content);
+    expect(commentDetails.date).toEqual(payload.date);
+    expect(commentDetails.username).toEqual(payload.username);
+    expect(commentDetails.replies).toEqual(payload.replies);
   });
 });

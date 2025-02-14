@@ -14,6 +14,7 @@ class CommentReplyHandler {
     );
     const { id: ownerId } = request.auth.credentials;
     const { threadId, commentId } = request.params;
+
     const addedCommentReply = await addCommentReplyUseCase.execute(
       request.payload,
       threadId,
@@ -21,6 +22,27 @@ class CommentReplyHandler {
       ownerId
     );
 
+    return this._createResponse(h, addedCommentReply);
+  }
+
+  async deleteCommentReplyHandler(request) {
+    const deleteCommentReplyUseCase = this._container.getInstance(
+      DeleteCommentReplyUseCase.name
+    );
+    const { id: credentialId } = request.auth.credentials;
+    const { threadId, commentId, commentReplyId } = request.params;
+
+    await deleteCommentReplyUseCase.execute(
+      commentReplyId,
+      threadId,
+      commentId,
+      credentialId
+    );
+
+    return this._createSuccessResponse();
+  }
+
+  _createResponse(h, addedCommentReply) {
     const response = h.response({
       status: 'success',
       data: {
@@ -31,20 +53,7 @@ class CommentReplyHandler {
     return response;
   }
 
-  async deleteCommentReplyHandler(request, h) {
-    const deleteCommentReplyUseCase = this._container.getInstance(
-      DeleteCommentReplyUseCase.name
-    );
-    const { id: creadentialId } = request.auth.credentials;
-    const { threadId, commentId, commentReplyId } = request.params;
-
-    await deleteCommentReplyUseCase.execute(
-      commentReplyId,
-      threadId,
-      commentId,
-      creadentialId
-    );
-
+  _createSuccessResponse() {
     return {
       status: 'success',
     };

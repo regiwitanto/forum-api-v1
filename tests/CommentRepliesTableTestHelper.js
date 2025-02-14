@@ -12,7 +12,7 @@ const CommentRepliesTableTestHelper = {
     is_delete = false,
   }) {
     const query = {
-      text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7) Returning id, content, user_id',
+      text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, user_id',
       values: [
         id,
         content,
@@ -27,10 +27,10 @@ const CommentRepliesTableTestHelper = {
     await pool.query(query);
   },
 
-  async getCommentReplyById(commentId) {
+  async getCommentReplyById(commentReplyId) {
     const query = {
       text: 'SELECT * FROM comment_replies WHERE id = $1',
-      values: [commentId],
+      values: [commentReplyId],
     };
 
     const result = await pool.query(query);

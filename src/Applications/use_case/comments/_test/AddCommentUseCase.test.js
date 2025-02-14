@@ -6,69 +6,51 @@ const AddedComment = require('../../../../Domains/comments/entities/AddedComment
 const AddCommentUseCase = require('../AddCommentUseCase');
 
 describe('AddCommentUseCase', () => {
-  it('should orchestrating the add comment', async () => {
-    const useCasePayload = {
-      content: 'This is comment',
-    };
+  it('should orchestrate the addition of a comment', async () => {
+    const commentContent = { content: 'This is comment' };
+    const user = { id: 'user-123' };
+    const thread = { id: 'thread-123' };
 
-    const useCaseCredential = {
-      id: 'user-123',
-    };
-
-    const useCaseThreadId = {
-      id: 'thread-123',
-    };
-
-    const mockAddedComment = new AddedComment({
+    const addedCommentData = new AddedComment({
       id: 'comment-123',
-      content: useCasePayload.content,
-      owner: useCaseCredential.id,
+      content: commentContent.content,
+      owner: user.id,
     });
 
-    const mockCommentRepository = new CommentRepository();
-    const mockThreadRepository = new ThreadRepository();
-    const mockUserRepository = new UserRepository();
+    const commentRepo = new CommentRepository();
+    const threadRepo = new ThreadRepository();
+    const userRepo = new UserRepository();
 
-    mockThreadRepository.getThreadById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCaseThreadId));
-    mockUserRepository.getUserById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCaseCredential));
-    mockCommentRepository.addComment = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockAddedComment));
+    threadRepo.getThreadById = jest.fn().mockResolvedValue(thread);
+    userRepo.getUserById = jest.fn().mockResolvedValue(user);
+    commentRepo.addComment = jest.fn().mockResolvedValue(addedCommentData);
 
     const addCommentUseCase = new AddCommentUseCase({
-      commentRepository: mockCommentRepository,
-      threadRepository: mockThreadRepository,
-      userRepository: mockUserRepository,
+      commentRepository: commentRepo,
+      threadRepository: threadRepo,
+      userRepository: userRepo,
     });
 
     const addedComment = await addCommentUseCase.execute(
-      useCasePayload,
-      useCaseThreadId.id,
-      useCaseCredential.id
+      commentContent,
+      thread.id,
+      user.id
     );
 
     expect(addedComment).toStrictEqual(
       new AddedComment({
         id: 'comment-123',
-        content: useCasePayload.content,
-        owner: useCaseCredential.id,
+        content: commentContent.content,
+        owner: user.id,
       })
     );
 
-    expect(mockThreadRepository.getThreadById).toBeCalledWith(
-      useCaseThreadId.id
-    );
-    expect(mockUserRepository.getUserById).toBeCalledWith(useCaseCredential.id);
-    expect(mockCommentRepository.addComment).toBeCalledWith(
-      new NewComment({
-        content: useCasePayload.content,
-      }).content,
-      useCaseThreadId.id,
-      useCaseCredential.id
+    expect(threadRepo.getThreadById).toBeCalledWith(thread.id);
+    expect(userRepo.getUserById).toBeCalledWith(user.id);
+    expect(commentRepo.addComment).toBeCalledWith(
+      new NewComment({ content: commentContent.content }).content,
+      thread.id,
+      user.id
     );
   });
 });

@@ -16,7 +16,7 @@ describe('a AddedThread entities', () => {
     const payload = {
       id: 'thread-123',
       title: 'This is title',
-      owner: 123,
+      owner: 123, // owner should be a string
     };
 
     expect(() => new AddedThread(payload)).toThrowError(
@@ -24,7 +24,7 @@ describe('a AddedThread entities', () => {
     );
   });
 
-  it('should create addedThread object correctly', () => {
+  it('should create AddedThread object correctly', () => {
     const payload = {
       id: 'thread-123',
       title: 'This is title',

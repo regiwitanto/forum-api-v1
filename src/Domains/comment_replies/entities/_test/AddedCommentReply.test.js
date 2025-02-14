@@ -1,41 +1,43 @@
 const AddedCommentReply = require('../AddedCommentReply');
 
-describe('a AddedCommentReply entities', () => {
-  it('should throw error when payload did not contain needed property', () => {
-    const payload = {
+describe('AddedCommentReply Entity', () => {
+  it('should throw error when required properties are missing', () => {
+    const incompletePayload = {
       id: 'thread-123',
       title: 'This is title',
       user: 'dad',
     };
 
-    expect(() => new AddedCommentReply(payload)).toThrowError(
+    expect(() => new AddedCommentReply(incompletePayload)).toThrowError(
       'ADDED_COMMENT_REPLY.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
 
-  it('should throw error when payload property did not meet data type needed', () => {
-    const payload = {
+  it('should throw error when properties have incorrect data types', () => {
+    const invalidPayload = {
       id: 'thread-123',
       content: 'This is title',
-      owner: 123,
+      owner: 123, // should be a string
     };
 
-    expect(() => new AddedCommentReply(payload)).toThrowError(
+    expect(() => new AddedCommentReply(invalidPayload)).toThrowError(
       'ADDED_COMMENT_REPLY.PROPERTY_NOT_MEET_DATA_TYPE_NEEDED'
     );
   });
 
-  it('should create addedThread object correctly', () => {
-    const payload = {
+  it('should create an AddedCommentReply object correctly', () => {
+    const validPayload = {
       id: 'comment-123',
       content: 'This is content',
       owner: 'user-123',
     };
 
-    const addedCommentReply = new AddedCommentReply(payload);
+    const addedCommentReply = new AddedCommentReply(validPayload);
 
-    expect(addedCommentReply.id).toEqual(payload.id);
-    expect(addedCommentReply.content).toEqual(payload.content);
-    expect(addedCommentReply.owner).toEqual(payload.owner);
+    expect(addedCommentReply).toEqual({
+      id: validPayload.id,
+      content: validPayload.content,
+      owner: validPayload.owner,
+    });
   });
 });

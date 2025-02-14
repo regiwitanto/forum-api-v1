@@ -9,68 +9,66 @@ class GetDetailsThreadUseCase {
     commentRepository,
     commentReplyRepository,
   }) {
-    this._userRepository = userRepository;
-    this._threadRepository = threadRepository;
-    this._commentRepository = commentRepository;
-    this._commentReplyRepository = commentReplyRepository;
+    this.userRepository = userRepository;
+    this.threadRepository = threadRepository;
+    this.commentRepository = commentRepository;
+    this.commentReplyRepository = commentReplyRepository;
   }
 
-  async execute(useCaseThreadId) {
-    const threadFromDb = await this._threadRepository.getThreadById(
-      useCaseThreadId
+  async execute(threadId) {
+    const threadData = await this.threadRepository.getThreadById(threadId);
+    const { username: threadUsername } = await this.userRepository.getUserById(
+      threadData.user_id
     );
-    const { username: threadUsername } = await this._userRepository.getUserById(
-      threadFromDb.user_id
-    );
-    const thread = new ThreadDetails({
-      id: threadFromDb.id,
-      title: threadFromDb.title,
-      body: threadFromDb.body,
-      date: threadFromDb.created_at.toString(),
+
+    const threadDetails = new ThreadDetails({
+      id: threadData.id,
+      title: threadData.title,
+      body: threadData.body,
+      date: threadData.created_at.toString(),
       username: threadUsername,
       comments: [],
     });
 
-    const commentsInThread = await this._commentRepository.getCommentByThreadId(
-      thread.id
+    const comments = await this.commentRepository.getCommentByThreadId(
+      threadDetails.id
     );
 
-    if (commentsInThread.length > 0) {
-      for (const commentData of commentsInThread) {
-        const { username: commentUsername } =
-          await this._userRepository.getUserById(commentData.user_id);
-        const commentDetails = new CommentDetails({
-          id: commentData.id,
-          content: commentData.content,
-          date: commentData.created_at.toString(),
-          username: commentUsername,
-          replies: [],
+    for (const comment of comments) {
+      const { username: commentUsername } =
+        await this.userRepository.getUserById(comment.user_id);
+
+      const commentDetails = new CommentDetails({
+        id: comment.id,
+        content: comment.content,
+        date: comment.created_at.toString(),
+        username: commentUsername,
+        replies: [],
+      });
+
+      const replies =
+        await this.commentReplyRepository.getCommentReplyByCommentId(
+          comment.id
+        );
+
+      for (const reply of replies) {
+        const { username: replyUsername } =
+          await this.userRepository.getUserById(reply.user_id);
+
+        const replyDetails = new CommentReplyDetails({
+          id: reply.id,
+          content: reply.content,
+          date: reply.created_at.toString(),
+          username: replyUsername,
         });
 
-        const repliesInComment =
-          await this._commentReplyRepository.getCommentReplyByCommentId(
-            commentData.id
-          );
-
-        if (repliesInComment.length > 0) {
-          for (const replyData of repliesInComment) {
-            const { username: replyUsername } =
-              await this._userRepository.getUserById(replyData.user_id);
-            const commentReplyDetails = new CommentReplyDetails({
-              id: replyData.id,
-              content: replyData.content,
-              date: replyData.created_at.toString(),
-              username: replyUsername,
-            });
-
-            commentDetails.replies.push(commentReplyDetails);
-          }
-        }
-
-        thread.comments.push(commentDetails);
+        commentDetails.replies.push(replyDetails);
       }
+
+      threadDetails.comments.push(commentDetails);
     }
-    return thread;
+
+    return threadDetails;
   }
 }
 

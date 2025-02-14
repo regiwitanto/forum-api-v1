@@ -1,13 +1,13 @@
 const ThreadDetails = require('../ThreadDetails');
 
 describe('a ThreadDetails', () => {
-  it('should throw error when payload did not contain right property', () => {
+  it('should throw error when payload did not contain needed property', () => {
     const payload = {
       title: 'something',
       body: 'something',
       date: 'something',
       username: 'something',
-      comments: [],
+      comments: [], // Missing 'id' property
     };
 
     expect(() => new ThreadDetails(payload)).toThrowError(
@@ -15,14 +15,14 @@ describe('a ThreadDetails', () => {
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
+  it('should throw error when payload contains wrong data type', () => {
     const payload = {
       id: 'something',
       title: 'something',
       body: 'something',
       date: 'something',
       username: 'something',
-      comments: '[]',
+      comments: '[]', // Should be an array, not a string
     };
 
     expect(() => new ThreadDetails(payload)).toThrowError(
@@ -30,17 +30,23 @@ describe('a ThreadDetails', () => {
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
+  it('should create ThreadDetails object correctly', () => {
     const payload = {
-      id: 'something',
-      title: 'something',
-      body: 'something',
-      date: 'something',
-      username: 'something',
+      id: 'thread-123',
+      title: 'Thread Title',
+      body: 'Thread body content.',
+      date: '2023-01-01',
+      username: 'john_doe',
       comments: [],
     };
 
     const threadDetails = new ThreadDetails(payload);
-    expect(threadDetails).toBeDefined();
+
+    expect(threadDetails.id).toEqual(payload.id);
+    expect(threadDetails.title).toEqual(payload.title);
+    expect(threadDetails.body).toEqual(payload.body);
+    expect(threadDetails.date).toEqual(payload.date);
+    expect(threadDetails.username).toEqual(payload.username);
+    expect(threadDetails.comments).toEqual(payload.comments);
   });
 });

@@ -1,7 +1,7 @@
 const AddedComment = require('../AddedComment');
 
-describe('a AddedComment entities', () => {
-  it('should throw error when payload did not contain needed property', () => {
+describe('AddedComment Entity', () => {
+  it('should throw error when payload does not contain needed properties', () => {
     const payload = {
       id: 'thread-123',
       title: 'This is title',
@@ -13,11 +13,11 @@ describe('a AddedComment entities', () => {
     );
   });
 
-  it('should throw error when payload property did not meet data type needed', () => {
+  it('should throw error when payload properties do not meet data type requirements', () => {
     const payload = {
       id: 'thread-123',
       content: 'This is title',
-      owner: 123,
+      owner: 123, // Should be a string, not a number
     };
 
     expect(() => new AddedComment(payload)).toThrowError(
@@ -25,7 +25,7 @@ describe('a AddedComment entities', () => {
     );
   });
 
-  it('should create addedThread object correctly', () => {
+  it('should create AddedComment object correctly', () => {
     const payload = {
       id: 'comment-123',
       content: 'This is content',
@@ -34,6 +34,7 @@ describe('a AddedComment entities', () => {
 
     const addedComment = new AddedComment(payload);
 
+    expect(addedComment).toBeInstanceOf(AddedComment);
     expect(addedComment.id).toEqual(payload.id);
     expect(addedComment.content).toEqual(payload.content);
     expect(addedComment.owner).toEqual(payload.owner);

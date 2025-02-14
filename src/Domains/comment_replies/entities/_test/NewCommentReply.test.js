@@ -1,41 +1,42 @@
 const NewCommentReply = require('../NewCommentReply');
 
-describe('a NewCommentReply entities', () => {
-  it('should throw error when payload did not contain right property', () => {
-    const payload = {};
+describe('NewCommentReply Entity', () => {
+  it('should throw error when payload does not contain required property', () => {
+    const incompletePayload = {};
 
-    expect(() => new NewCommentReply(payload)).toThrowError(
+    expect(() => new NewCommentReply(incompletePayload)).toThrowError(
       'NEW_COMMENT_REPLY.NOT_CONTAIN_NEEDED_PROPERTY'
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
-    const payload = {
-      content: 123,
+  it('should throw error when payload contains incorrect data type', () => {
+    const invalidPayload = {
+      content: 123, // should be a string
     };
 
-    expect(() => new NewCommentReply(payload)).toThrowError(
+    expect(() => new NewCommentReply(invalidPayload)).toThrowError(
       'NEW_COMMENT_REPLY.PROPERTY_HAVE_WRONG_DATA_TYPE'
     );
   });
 
-  it('should throw error when payload is empty string', () => {
-    const payload = {
+  it('should throw error when content is an empty string', () => {
+    const emptyStringPayload = {
       content: '    ',
     };
 
-    expect(() => new NewCommentReply(payload)).toThrowError(
+    expect(() => new NewCommentReply(emptyStringPayload)).toThrowError(
       'NEW_COMMENT_REPLY.CANNOT_BE_EMPTY_STRING'
     );
   });
 
-  it('should create newCommentReply object correctly', () => {
-    const payload = {
+  it('should create NewCommentReply object correctly with valid payload', () => {
+    const validPayload = {
       content: 'this is content',
     };
 
-    const newCommentReply = new NewCommentReply(payload);
+    const newCommentReply = new NewCommentReply(validPayload);
 
-    expect(newCommentReply.content).toEqual(payload.content);
+    expect(newCommentReply).toBeDefined();
+    expect(newCommentReply.content).toEqual(validPayload.content);
   });
 });

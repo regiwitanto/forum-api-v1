@@ -38,7 +38,6 @@ describe('ThreadRepositoryPostgres', () => {
       await threadRepositoryPostgres.addNewThread(newThread, userId);
 
       const threads = await ThreadsTableTestHelper.findThreadById('thread-123');
-
       expect(threads).toHaveLength(1);
     });
 
@@ -63,7 +62,7 @@ describe('ThreadRepositoryPostgres', () => {
         new AddedThread({
           id: 'thread-123',
           title: 'First thread',
-          owner: 'user-123',
+          owner: userId,
         })
       );
     });

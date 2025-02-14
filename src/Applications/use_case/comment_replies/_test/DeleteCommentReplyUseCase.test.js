@@ -3,48 +3,37 @@ const OwnerValidator = require('../../../security/OwnerValidator');
 const DeleteCommentReplyUseCase = require('../DeleteCommentReplyUseCase');
 
 describe('DeleteCommentReplyUseCase', () => {
-  it('should orchestrating the delete comment reply', async () => {
-    const useCaseCommentReplyId = 'reply-212';
-    const useCaseCommentId = 'comment-212';
-    const useCaseThreadId = 'thread-212';
-    const useCaseCredential = 'user-212';
+  it('should orchestrate the deletion of a comment reply', async () => {
+    const replyId = 'reply-212';
+    const commentId = 'comment-212';
+    const threadId = 'thread-212';
+    const userId = 'user-212';
 
-    const commentAvailable = {
-      id: useCaseCommentReplyId,
-      user_id: useCaseCredential,
+    const existingReply = {
+      id: replyId,
+      user_id: userId,
     };
 
-    const mockCommentReplyRepository = new CommentReplyRepository();
-    const mockOwnerValidator = new OwnerValidator();
+    const commentReplyRepo = new CommentReplyRepository();
+    const ownerValidator = new OwnerValidator();
 
-    mockCommentReplyRepository.getCommentReplyById = jest
+    commentReplyRepo.getCommentReplyById = jest
       .fn()
-      .mockImplementation(() => Promise.resolve(commentAvailable));
-    mockOwnerValidator.verifyOwner = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
-    mockCommentReplyRepository.deleteCommentReply = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve());
+      .mockResolvedValue(existingReply);
+    ownerValidator.verifyOwner = jest.fn().mockResolvedValue();
+    commentReplyRepo.deleteCommentReply = jest.fn().mockResolvedValue();
 
-    const deleteCommentReplyUseCase = new DeleteCommentReplyUseCase({
-      commentReplyRepository: mockCommentReplyRepository,
-      ownerValidator: mockOwnerValidator,
+    const deleteReplyUseCase = new DeleteCommentReplyUseCase({
+      commentReplyRepository: commentReplyRepo,
+      ownerValidator: ownerValidator,
     });
 
-    await deleteCommentReplyUseCase.execute(
-      useCaseCommentReplyId,
-      useCaseThreadId,
-      useCaseCommentId,
-      useCaseCredential
-    );
+    await deleteReplyUseCase.execute(replyId, threadId, commentId, userId);
 
-    expect(mockCommentReplyRepository.getCommentReplyById).toBeCalledWith(
-      useCaseCommentReplyId
-    );
-    expect(mockOwnerValidator.verifyOwner).toBeCalledWith(
-      useCaseCredential,
-      commentAvailable.user_id,
+    expect(commentReplyRepo.getCommentReplyById).toBeCalledWith(replyId);
+    expect(ownerValidator.verifyOwner).toBeCalledWith(
+      userId,
+      existingReply.user_id,
       'comment reply'
     );
   });

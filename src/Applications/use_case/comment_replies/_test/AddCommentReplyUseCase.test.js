@@ -7,80 +7,57 @@ const AddCommentReplyUseCase = require('../AddCommentReplyUseCase');
 const CommentReplyRepository = require('../../../../Domains/comment_replies/CommentReplyRepository');
 
 describe('AddCommentReplyUseCase', () => {
-  it('should orchestrating the add comment reply', async () => {
-    const useCasePayload = {
-      content: 'This is comment',
-    };
+  it('should orchestrate the addition of a comment reply', async () => {
+    const replyContent = { content: 'This is comment' };
+    const user = { id: 'user-123' };
+    const thread = { id: 'thread-123' };
+    const comment = { id: 'comment-123' };
 
-    const useCaseCredential = {
-      id: 'user-123',
-    };
-
-    const useCaseThreadId = {
-      id: 'thread-123',
-    };
-
-    const useCaseCommentId = {
-      id: 'comment-123',
-    };
-
-    const mockAddedCommentReply = new AddedCommentReply({
+    const addedReply = new AddedCommentReply({
       id: 'reply-123',
-      content: useCasePayload.content,
-      owner: useCaseCredential.id,
+      content: replyContent.content,
+      owner: user.id,
     });
 
-    const mockCommentReplyRepository = new CommentReplyRepository();
-    const mockCommentRepository = new CommentRepository();
-    const mockThreadRepository = new ThreadRepository();
-    const mockUserRepository = new UserRepository();
+    const commentReplyRepo = new CommentReplyRepository();
+    const commentRepo = new CommentRepository();
+    const threadRepo = new ThreadRepository();
+    const userRepo = new UserRepository();
 
-    mockCommentRepository.getCommentById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCaseCommentId));
-    mockThreadRepository.getThreadById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCaseThreadId));
-    mockUserRepository.getUserById = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(useCaseCredential));
-    mockCommentReplyRepository.addCommentReply = jest
-      .fn()
-      .mockImplementation(() => Promise.resolve(mockAddedCommentReply));
+    commentRepo.getCommentById = jest.fn().mockResolvedValue(comment);
+    threadRepo.getThreadById = jest.fn().mockResolvedValue(thread);
+    userRepo.getUserById = jest.fn().mockResolvedValue(user);
+    commentReplyRepo.addCommentReply = jest.fn().mockResolvedValue(addedReply);
 
-    const addCommentReplyUseCase = new AddCommentReplyUseCase({
-      commentReplyRepository: mockCommentReplyRepository,
-      commentRepository: mockCommentRepository,
-      threadRepository: mockThreadRepository,
-      userRepository: mockUserRepository,
+    const addReplyUseCase = new AddCommentReplyUseCase({
+      commentReplyRepository: commentReplyRepo,
+      commentRepository: commentRepo,
+      threadRepository: threadRepo,
+      userRepository: userRepo,
     });
 
-    const addedComment = await addCommentReplyUseCase.execute(
-      useCasePayload,
-      useCaseThreadId.id,
-      useCaseCommentId.id,
-      useCaseCredential.id
+    const addedCommentReply = await addReplyUseCase.execute(
+      replyContent,
+      thread.id,
+      comment.id,
+      user.id
     );
 
-    expect(addedComment).toStrictEqual(
+    expect(addedCommentReply).toStrictEqual(
       new AddedCommentReply({
         id: 'reply-123',
-        content: useCasePayload.content,
-        owner: useCaseCredential.id,
+        content: replyContent.content,
+        owner: user.id,
       })
     );
 
-    expect(mockThreadRepository.getThreadById).toBeCalledWith(
-      useCaseThreadId.id
-    );
-    expect(mockUserRepository.getUserById).toBeCalledWith(useCaseCredential.id);
-    expect(mockCommentReplyRepository.addCommentReply).toBeCalledWith(
-      new NewCommentReply({
-        content: useCasePayload.content,
-      }).content,
-      useCaseThreadId.id,
-      useCaseCommentId.id,
-      useCaseCredential.id
+    expect(threadRepo.getThreadById).toBeCalledWith(thread.id);
+    expect(userRepo.getUserById).toBeCalledWith(user.id);
+    expect(commentReplyRepo.addCommentReply).toBeCalledWith(
+      new NewCommentReply({ content: replyContent.content }).content,
+      thread.id,
+      comment.id,
+      user.id
     );
   });
 });

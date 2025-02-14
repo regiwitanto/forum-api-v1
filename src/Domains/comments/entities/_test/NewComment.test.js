@@ -1,7 +1,7 @@
 const NewComment = require('../NewComment');
 
-describe('a NewComment entities', () => {
-  it('should throw error when payload did not contain right property', () => {
+describe('NewComment Entity', () => {
+  it('should throw an error when payload does not contain required property', () => {
     const payload = {};
 
     expect(() => new NewComment(payload)).toThrowError(
@@ -9,9 +9,9 @@ describe('a NewComment entities', () => {
     );
   });
 
-  it('should throw error when payload contain wrong data type', () => {
+  it('should throw an error when content is not a string', () => {
     const payload = {
-      content: 123,
+      content: 123, // Should be a string
     };
 
     expect(() => new NewComment(payload)).toThrowError(
@@ -19,9 +19,9 @@ describe('a NewComment entities', () => {
     );
   });
 
-  it('should throw error when payload is empty string', () => {
+  it('should throw an error when content is an empty string', () => {
     const payload = {
-      content: '    ',
+      content: '    ', // Empty string after trim
     };
 
     expect(() => new NewComment(payload)).toThrowError(
@@ -29,13 +29,14 @@ describe('a NewComment entities', () => {
     );
   });
 
-  it('should create newComment object correctly', () => {
+  it('should create NewComment object correctly when payload is valid', () => {
     const payload = {
       content: 'this is content',
     };
 
     const newComment = new NewComment(payload);
 
+    expect(newComment).toBeInstanceOf(NewComment);
     expect(newComment.content).toEqual(payload.content);
   });
 });

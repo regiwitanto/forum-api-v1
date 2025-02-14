@@ -40,10 +40,11 @@ describe('CommentReplyRepositoryPostgres', () => {
       const newCommentReply = new NewCommentReply({
         content: 'This is a reply',
       });
-
       const fakeIdGenerator = () => '222';
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, fakeIdGenerator);
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
 
       await commentReplyRepositoryPostgres.addCommentReply(
         newCommentReply.content,
@@ -55,7 +56,6 @@ describe('CommentReplyRepositoryPostgres', () => {
       const comment = await CommentRepliesTableTestHelper.getCommentReplyById(
         'reply-222'
       );
-
       expect(comment).toHaveLength(1);
     });
 
@@ -63,10 +63,11 @@ describe('CommentReplyRepositoryPostgres', () => {
       const newCommentReply = new NewCommentReply({
         content: 'This is a reply',
       });
-
       const fakeIdGenerator = () => '222';
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, fakeIdGenerator);
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        fakeIdGenerator
+      );
 
       const addedCommentReply =
         await commentReplyRepositoryPostgres.addCommentReply(
@@ -88,8 +89,10 @@ describe('CommentReplyRepositoryPostgres', () => {
 
   describe('getCommentReplyById', () => {
     it('should return NotFoundError when comment not found', async () => {
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       await expect(
         commentReplyRepositoryPostgres.getCommentReplyById('wrong-comment')
@@ -103,8 +106,10 @@ describe('CommentReplyRepositoryPostgres', () => {
         thread_id: threadId,
         comment_id: commentId,
       });
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       const comment = await commentReplyRepositoryPostgres.getCommentReplyById(
         'reply-333'
@@ -119,8 +124,10 @@ describe('CommentReplyRepositoryPostgres', () => {
 
   describe('getCommentReplyByCommentId', () => {
     it('should return empty array when comment not found', async () => {
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       const commentReplies =
         await commentReplyRepositoryPostgres.getCommentReplyByCommentId(
@@ -145,8 +152,10 @@ describe('CommentReplyRepositoryPostgres', () => {
         comment_id: commentId,
       });
 
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       const comments =
         await commentReplyRepositoryPostgres.getCommentReplyByCommentId(
@@ -157,7 +166,7 @@ describe('CommentReplyRepositoryPostgres', () => {
     });
   });
 
-  describe('deleteComment', () => {
+  describe('deleteCommentReply', () => {
     it('should delete comment correctly and persist comment', async () => {
       await CommentRepliesTableTestHelper.addCommentReply({
         id: 'reply-333',
@@ -166,8 +175,10 @@ describe('CommentReplyRepositoryPostgres', () => {
         comment_id: commentId,
         is_delete: false,
       });
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       await commentReplyRepositoryPostgres.deleteCommentReply(
         'reply-333',
@@ -185,8 +196,10 @@ describe('CommentReplyRepositoryPostgres', () => {
     });
 
     it('should return InvariantError when failed to delete comment', async () => {
-      const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgres(pool, {});
+      const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
+        pool,
+        {}
+      );
 
       await expect(
         commentReplyRepositoryPostgres.deleteCommentReply(
