@@ -1,10 +1,10 @@
-const ThreadsTableTestHelper = require('../../../../tests/ThreadTableTestHelper');
+const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const CommentsTableTestHelper = require('../../../../tests/CommentsTableTestHelper');
 const CommentRepliesTableTestHelper = require('../../../../tests/CommentRepliesTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const NewCommentReply = require('../../../Domains/comment_replies/entities/NewCommentReply');
-const CommentReplyRepositoryPostgress = require('../CommentReplyRepositoryPostgres');
+const CommentReplyRepositoryPostgres = require('../CommentReplyRepositoryPostgres');
 const AddedCommentReply = require('../../../Domains/comment_replies/entities/AddedCommentReply');
 const InvariantError = require('../../../Commons/exceptions/InvariantError');
 const NotFoundError = require('../../../Commons/exceptions/NotFoundError');
@@ -43,7 +43,7 @@ describe('CommentReplyRepositoryPostgres', () => {
 
       const fakeIdGenerator = () => '222';
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, fakeIdGenerator);
+        new CommentReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       await commentReplyRepositoryPostgres.addCommentReply(
         newCommentReply.content,
@@ -66,7 +66,7 @@ describe('CommentReplyRepositoryPostgres', () => {
 
       const fakeIdGenerator = () => '222';
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, fakeIdGenerator);
+        new CommentReplyRepositoryPostgres(pool, fakeIdGenerator);
 
       const addedCommentReply =
         await commentReplyRepositoryPostgres.addCommentReply(
@@ -89,7 +89,7 @@ describe('CommentReplyRepositoryPostgres', () => {
   describe('getCommentReplyById', () => {
     it('should return NotFoundError when comment not found', async () => {
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       await expect(
         commentReplyRepositoryPostgres.getCommentReplyById('wrong-comment')
@@ -104,7 +104,7 @@ describe('CommentReplyRepositoryPostgres', () => {
         comment_id: commentId,
       });
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       const comment = await commentReplyRepositoryPostgres.getCommentReplyById(
         'reply-333'
@@ -120,7 +120,7 @@ describe('CommentReplyRepositoryPostgres', () => {
   describe('getCommentReplyByCommentId', () => {
     it('should return empty array when comment not found', async () => {
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       const commentReplies =
         await commentReplyRepositoryPostgres.getCommentReplyByCommentId(
@@ -146,7 +146,7 @@ describe('CommentReplyRepositoryPostgres', () => {
       });
 
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       const comments =
         await commentReplyRepositoryPostgres.getCommentReplyByCommentId(
@@ -167,7 +167,7 @@ describe('CommentReplyRepositoryPostgres', () => {
         is_delete: false,
       });
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       await commentReplyRepositoryPostgres.deleteCommentReply(
         'reply-333',
@@ -186,7 +186,7 @@ describe('CommentReplyRepositoryPostgres', () => {
 
     it('should return InvariantError when failed to delete comment', async () => {
       const commentReplyRepositoryPostgres =
-        new CommentReplyRepositoryPostgress(pool, {});
+        new CommentReplyRepositoryPostgres(pool, {});
 
       await expect(
         commentReplyRepositoryPostgres.deleteCommentReply(

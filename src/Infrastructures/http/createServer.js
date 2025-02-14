@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const Hapi = require('@hapi/hapi');
 const ClientError = require('../../Commons/exceptions/ClientError');
 const DomainErrorTranslator = require('../../Commons/exceptions/DomainErrorTranslator');
@@ -6,6 +8,7 @@ const authentications = require('../../Interfaces/http/api/authentications');
 const Jwt = require('@hapi/jwt');
 const threads = require('../../Interfaces/http/api/threads');
 const comments = require('../../Interfaces/http/api/comments');
+const comment_replies = require('../../Interfaces/http/api/comment_replies');
 
 const createServer = async (container) => {
   const server = Hapi.server({
@@ -52,13 +55,15 @@ const createServer = async (container) => {
       plugin: comments,
       options: { container },
     },
+    {
+      plugin: comment_replies,
+      options: { container },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
-    // console.log("🚀 ~ file: createServer.js:58 ~ server.ext ~ h:", h)
     // mendapatkan konteks response dari request
     const { response } = request;
-
     if (response instanceof Error) {
       // bila response tersebut error, tangani sesuai kebutuhan
       const translatedError = DomainErrorTranslator.translate(response);

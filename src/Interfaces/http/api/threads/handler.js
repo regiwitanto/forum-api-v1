@@ -5,6 +5,7 @@ class ThreadHandler {
   constructor(container) {
     this._container = container;
     this.postThreadHandler = this.postThreadHandler.bind(this);
+    this.getThreadDetailsHandler = this.getThreadDetailsHandler.bind(this);
   }
 
   async postThreadHandler(request, h) {

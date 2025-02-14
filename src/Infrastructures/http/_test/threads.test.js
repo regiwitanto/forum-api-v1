@@ -6,7 +6,7 @@ const {
   addCommentOption,
   addCommentReplyOption,
 } = require('../../../../tests/ServerInjectionFunctionHelper');
-const ThreadTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
+const ThreadsTableTestHelper = require('../../../../tests/ThreadsTableTestHelper');
 const UsersTableTestHelper = require('../../../../tests/UsersTableTestHelper');
 const pool = require('../../database/postgres/pool');
 const container = require('../../container');
@@ -18,7 +18,7 @@ describe('/threads endpoint', () => {
   });
 
   afterEach(async () => {
-    await ThreadTableTestHelper.cleanTable();
+    await ThreadsTableTestHelper.cleanTable();
     await UsersTableTestHelper.cleanTable();
   });
 
@@ -167,8 +167,6 @@ describe('/threads endpoint', () => {
         content: 'This is reply',
       };
 
-      const mockThreadDetails = {};
-
       const server = await createServer(container);
 
       await injection(server, addUserOption(userPayload));
@@ -198,6 +196,7 @@ describe('/threads endpoint', () => {
       });
 
       const responseJson = JSON.parse(response.payload);
+      
       expect(response.statusCode).toEqual(200);
       expect(responseJson.status).toEqual('success');
       expect(responseJson.data.thread).toBeDefined();

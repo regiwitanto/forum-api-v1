@@ -35,6 +35,8 @@ const AddThreadUseCase = require('../Applications/use_case/threads/AddThreadUseC
 const AddCommentUseCase = require('../Applications/use_case/comments/AddCommentUseCase');
 const DeleteCommentUseCase = require('../Applications/use_case/comments/DeleteCommentUseCase');
 const GetDetailsThreadUseCase = require('../Applications/use_case/threads/GetDetailsThreadUseCase');
+const AddCommentReplyUseCase = require('../Applications/use_case/comment_replies/AddCommentReplyUseCase');
+const DeleteCommentReplyUseCase = require('../Applications/use_case/comment_replies/DeleteCommentReplyUseCase');
 
 // creating container
 const container = createContainer();
@@ -119,6 +121,20 @@ container.register([
   {
     key: OwnerValidator.name,
     Class: OwnerValidatorManager,
+  },
+  {
+    key: CommentReplyRepository.name,
+    Class: CommentReplyRepositoryPostgres,
+    parameter: {
+      dependencies: [
+        {
+          concrete: pool,
+        },
+        {
+          concrete: nanoid,
+        },
+      ],
+    },
   },
 ]);
 
@@ -267,7 +283,49 @@ container.register([
         },
         {
           name: 'commentReplyRepository',
+          internal: CommentReplyRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: AddCommentReplyUseCase.name,
+    Class: AddCommentReplyUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'commentReplyRepository',
+          internal: CommentReplyRepository.name,
+        },
+        {
+          name: 'commentRepository',
           internal: CommentRepository.name,
+        },
+        {
+          name: 'threadRepository',
+          internal: ThreadRepository.name,
+        },
+        {
+          name: 'userRepository',
+          internal: UserRepository.name,
+        },
+      ],
+    },
+  },
+  {
+    key: DeleteCommentReplyUseCase.name,
+    Class: DeleteCommentReplyUseCase,
+    parameter: {
+      injectType: 'destructuring',
+      dependencies: [
+        {
+          name: 'commentReplyRepository',
+          internal: CommentReplyRepository.name,
+        },
+        {
+          name: 'ownerValidator',
+          internal: OwnerValidator.name,
         },
       ],
     },
