@@ -21,9 +21,9 @@ describe('AddCommentUseCase', () => {
     const threadRepo = new ThreadRepository();
     const userRepo = new UserRepository();
 
-    threadRepo.getThreadById = jest.fn().mockResolvedValue(thread);
-    userRepo.getUserById = jest.fn().mockResolvedValue(user);
-    commentRepo.addComment = jest.fn().mockResolvedValue(addedCommentData);
+    threadRepo.getThreadById = jest.fn().mockImplementation(() => Promise.resolve(thread));
+    userRepo.getUserById = jest.fn().mockImplementation(() => Promise.resolve(user));
+    commentRepo.addComment = jest.fn().mockImplementation(() => Promise.resolve(addedCommentData));
 
     const addCommentUseCase = new AddCommentUseCase({
       commentRepository: commentRepo,

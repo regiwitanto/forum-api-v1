@@ -16,9 +16,9 @@ describe('DeleteCommentUseCase', () => {
     const commentRepo = new CommentRepository();
     const ownerValidator = new OwnerValidator();
 
-    commentRepo.getCommentById = jest.fn().mockResolvedValue(existingComment);
-    ownerValidator.verifyOwner = jest.fn().mockResolvedValue();
-    commentRepo.deleteComment = jest.fn().mockResolvedValue();
+    commentRepo.getCommentById = jest.fn().mockImplementation(() => Promise.resolve(existingComment));
+    ownerValidator.verifyOwner = jest.fn().mockImplementation(() => Promise.resolve());
+    commentRepo.deleteComment = jest.fn().mockImplementation(() => Promise.resolve());
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
       commentRepository: commentRepo,

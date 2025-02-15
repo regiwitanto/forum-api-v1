@@ -19,9 +19,13 @@ describe('DeleteCommentReplyUseCase', () => {
 
     commentReplyRepo.getCommentReplyById = jest
       .fn()
-      .mockResolvedValue(existingReply);
-    ownerValidator.verifyOwner = jest.fn().mockResolvedValue();
-    commentReplyRepo.deleteCommentReply = jest.fn().mockResolvedValue();
+      .mockImplementation(() => Promise.resolve(existingReply));
+    ownerValidator.verifyOwner = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
+    commentReplyRepo.deleteCommentReply = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
 
     const deleteReplyUseCase = new DeleteCommentReplyUseCase({
       commentReplyRepository: commentReplyRepo,

@@ -81,14 +81,16 @@ describe('GetDetailsThreadUseCase', () => {
   });
 
   it('should retrieve thread details with comments and replies', async () => {
-    threadRepo.getThreadById = jest.fn().mockResolvedValue(sampleThread);
+    threadRepo.getThreadById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(sampleThread));
     userRepo.getUserById = jest.fn().mockImplementation((userId) => {
       if (userId === alice.id) return Promise.resolve(alice);
       if (userId === bob.id) return Promise.resolve(bob);
     });
     commentRepo.getCommentByThreadId = jest
       .fn()
-      .mockResolvedValue(sampleComments);
+      .mockImplementation(() => Promise.resolve(sampleComments));
     commentReplyRepo.getCommentReplyByCommentId = jest
       .fn()
       .mockImplementation((commentId) => {
@@ -114,12 +116,16 @@ describe('GetDetailsThreadUseCase', () => {
   });
 
   it('should retrieve thread details when no comments are present', async () => {
-    threadRepo.getThreadById = jest.fn().mockResolvedValue(sampleThread);
+    threadRepo.getThreadById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(sampleThread));
     userRepo.getUserById = jest.fn().mockImplementation((userId) => {
       if (userId === alice.id) return Promise.resolve(alice);
       if (userId === bob.id) return Promise.resolve(bob);
     });
-    commentRepo.getCommentByThreadId = jest.fn().mockResolvedValue([]);
+    commentRepo.getCommentByThreadId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([]));
 
     const getDetailsThreadUseCase = new GetDetailsThreadUseCase({
       commentReplyRepository: commentReplyRepo,
