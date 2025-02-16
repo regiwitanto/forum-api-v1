@@ -182,6 +182,7 @@ describe('CommentRepositoryPostgres', () => {
         id: 'comment-333',
         user_id: userId,
         thread_id: threadId,
+        content: 'This is a comment',
         is_delete: false,
       });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
@@ -196,7 +197,7 @@ describe('CommentRepositoryPostgres', () => {
       );
 
       expect(deletedComment[0].is_delete).toEqual(true);
-      expect(deletedComment[0].content).toEqual('**komentar telah dihapus**');
+      expect(deletedComment[0].content).toEqual('This is a comment');
     });
 
     it('should return InvariantError when failed to delete comment', async () => {

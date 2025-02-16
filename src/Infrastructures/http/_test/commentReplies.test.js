@@ -29,7 +29,7 @@ describe('/threads/{threadId}/comments/{commentId}/replies endpoint', () => {
   };
   const loginPayload = { username: 'dicoding', password: 'secret' };
   const notOwnerLoginPayload = { username: 'ichsan', password: 'secret' };
-  const requestPayload = { content: 'This is reply' };
+  const requestPayload = { content: 'This is a reply' };
 
   afterEach(async () => {
     await CommentRepliesTableTestHelper.cleanTable();

@@ -121,7 +121,7 @@ describe('/threads endpoint', () => {
 
       await createCommentReply(
         server,
-        { content: 'This is reply' },
+        { content: 'This is a reply' },
         authToken,
         threadId,
         commentId
