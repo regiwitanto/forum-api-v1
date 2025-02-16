@@ -109,10 +109,38 @@ describe('GetDetailsThreadUseCase', () => {
       sampleThread.id
     );
 
+    expect(threadDetails).toBeDefined();
+    expect(threadDetails.id).toBe(sampleThread.id);
+    expect(threadDetails.title).toBe(sampleThread.title);
+    expect(threadDetails.body).toBe(sampleThread.body);
+    expect(threadDetails.date).toBe(sampleThread.created_at);
+    expect(threadDetails.username).toBe(alice.username);
+
     expect(threadDetails.comments).toHaveLength(3);
-    expect(threadDetails.comments[0].replies).toHaveLength(4);
-    expect(threadDetails.comments[0].replies[0].username).toBe(bob.username);
-    expect(threadDetails.comments[0].replies[1].username).toBe(alice.username);
+    threadDetails.comments.forEach((comment, index) => {
+      const expectedComment = sampleComments[index];
+      expect(comment.id).toBe(expectedComment.id);
+      expect(comment.content).toBe(expectedComment.content);
+      expect(comment.date).toBe(expectedComment.created_at);
+      expect(comment.username).toBe(alice.username);
+
+      if (comment.id === 'comment-1') {
+        expect(comment.replies).toHaveLength(4);
+
+        comment.replies.forEach((reply, replyIndex) => {
+          const expectedReply = sampleReplies[replyIndex];
+          expect(reply.id).toBe(expectedReply.id);
+          expect(reply.content).toBe(expectedReply.content);
+          expect(reply.date).toBe(expectedReply.created_at);
+
+          const expectedUser =
+            expectedReply.user_id === alice.id ? alice.username : bob.username;
+          expect(reply.username).toBe(expectedUser);
+        });
+      } else {
+        expect(comment.replies).toHaveLength(0);
+      }
+    });
   });
 
   it('should retrieve thread details when no comments are present', async () => {
