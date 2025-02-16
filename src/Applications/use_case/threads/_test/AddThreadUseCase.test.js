@@ -31,7 +31,7 @@ describe('AddThreadUseCase', () => {
 
     const result = await addThreadUseCase.execute(newThreadData, user);
 
-    expect(result).toStrictEqual(expectedAddedThread);
     expect(threadRepo.addNewThread).toHaveBeenCalledWith(newThreadData, user);
+    expect(result).toStrictEqual(expectedAddedThread);
   });
 });

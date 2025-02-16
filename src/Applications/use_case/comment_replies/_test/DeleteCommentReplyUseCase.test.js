@@ -40,5 +40,11 @@ describe('DeleteCommentReplyUseCase', () => {
       existingReply.user_id,
       'comment reply'
     );
+    expect(commentReplyRepo.deleteCommentReply).toBeCalledWith(
+      replyId,
+      threadId,
+      commentId,
+      userId
+    );
   });
 });

@@ -16,9 +16,15 @@ describe('DeleteCommentUseCase', () => {
     const commentRepo = new CommentRepository();
     const ownerValidator = new OwnerValidator();
 
-    commentRepo.getCommentById = jest.fn().mockImplementation(() => Promise.resolve(existingComment));
-    ownerValidator.verifyOwner = jest.fn().mockImplementation(() => Promise.resolve());
-    commentRepo.deleteComment = jest.fn().mockImplementation(() => Promise.resolve());
+    commentRepo.getCommentById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(existingComment));
+    ownerValidator.verifyOwner = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
+    commentRepo.deleteComment = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
 
     const deleteCommentUseCase = new DeleteCommentUseCase({
       commentRepository: commentRepo,
@@ -32,6 +38,11 @@ describe('DeleteCommentUseCase', () => {
       userId,
       existingComment.user_id,
       'comment'
+    );
+    expect(commentRepo.deleteComment).toBeCalledWith(
+      commentId,
+      threadId,
+      userId
     );
   });
 });

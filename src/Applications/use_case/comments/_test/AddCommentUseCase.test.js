@@ -47,7 +47,6 @@ describe('AddCommentUseCase', () => {
       user.id
     );
 
-    expect(addedComment).toStrictEqual(expectedAddedComment);
     expect(threadRepo.verifyThreadAvailability).toBeCalledWith(thread.id);
     expect(userRepo.getUserById).toBeCalledWith(user.id);
     expect(commentRepo.addComment).toBeCalledWith(
@@ -55,5 +54,6 @@ describe('AddCommentUseCase', () => {
       thread.id,
       user.id
     );
+    expect(addedComment).toStrictEqual(expectedAddedComment);
   });
 });
