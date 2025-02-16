@@ -86,6 +86,8 @@ describe('CommentRepositoryPostgres', () => {
         id: 'comment-333',
         user_id: userId,
         thread_id: threadId,
+        content: 'This is a comment',
+        is_deleted: false,
       });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -96,6 +98,8 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment.id).toEqual('comment-333');
       expect(comment.user_id).toEqual(userId);
       expect(comment.thread_id).toEqual(threadId);
+      expect(comment.content).toEqual('This is a comment');
+      expect(comment.is_delete).toEqual(false);
     });
   });
 
@@ -103,18 +107,27 @@ describe('CommentRepositoryPostgres', () => {
     it('should return comments correctly', async () => {
       await CommentsTableTestHelper.addComment({
         id: 'comment-333',
-        user_id: userId,
-        thread_id: threadId,
+        content: 'This is comment',
+        user_id: 'user-123',
+        thread_id: 'thread-123',
+        date: new Date(),
+        is_delete: false,
       });
       await CommentsTableTestHelper.addComment({
         id: 'comment-222',
-        user_id: userId,
-        thread_id: threadId,
+        content: 'This is comment',
+        user_id: 'user-123',
+        thread_id: 'thread-123',
+        date: new Date(),
+        is_delete: false,
       });
       await CommentsTableTestHelper.addComment({
         id: 'comment-111',
-        user_id: userId,
-        thread_id: threadId,
+        content: 'This is comment',
+        user_id: 'user-123',
+        thread_id: 'thread-123',
+        date: new Date(),
+        is_delete: false,
       });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -123,6 +136,32 @@ describe('CommentRepositoryPostgres', () => {
       );
 
       expect(comments).toHaveLength(3);
+      expect(comments).toEqual([
+        {
+          id: 'comment-333',
+          content: 'This is comment',
+          user_id: 'user-123',
+          thread_id: 'thread-123',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+        {
+          id: 'comment-222',
+          content: 'This is comment',
+          user_id: 'user-123',
+          thread_id: 'thread-123',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+        {
+          id: 'comment-111',
+          content: 'This is comment',
+          user_id: 'user-123',
+          thread_id: 'thread-123',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+      ]);
     });
 
     it('should return empty array if there is no comment correctly', async () => {

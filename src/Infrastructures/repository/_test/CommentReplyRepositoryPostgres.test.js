@@ -100,12 +100,17 @@ describe('CommentReplyRepositoryPostgres', () => {
     });
 
     it('should return comment correctly', async () => {
-      await CommentRepliesTableTestHelper.addCommentReply({
+      const expectedCommentReply = {
         id: 'reply-333',
+        content: 'This is a reply',
+        created_at: new Date(),
         user_id: userId,
         thread_id: threadId,
         comment_id: commentId,
-      });
+        is_delete: false,
+      };
+
+      await CommentRepliesTableTestHelper.addCommentReply(expectedCommentReply);
       const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
         pool,
         {}
@@ -115,10 +120,14 @@ describe('CommentReplyRepositoryPostgres', () => {
         'reply-333'
       );
 
-      expect(comment.id).toEqual('reply-333');
+      expect(comment).toBeDefined();
+      expect(comment.id).toEqual(expectedCommentReply.id);
+      expect(comment.content).toEqual(expectedCommentReply.content);
+      expect(comment.created_at).toEqual(expectedCommentReply.created_at);
       expect(comment.user_id).toEqual(userId);
       expect(comment.thread_id).toEqual(threadId);
       expect(comment.comment_id).toEqual(commentId);
+      expect(comment.is_delete).toEqual(expectedCommentReply.is_delete);
     });
   });
 
@@ -141,15 +150,30 @@ describe('CommentReplyRepositoryPostgres', () => {
     it('should return comment correctly', async () => {
       await CommentRepliesTableTestHelper.addCommentReply({
         id: 'reply-333',
+        user_id: userId,
+        thread_id: threadId,
         comment_id: commentId,
+        content: 'Reply 333',
+        date: new Date(),
+        is_deleted: false,
       });
       await CommentRepliesTableTestHelper.addCommentReply({
         id: 'reply-222',
+        user_id: userId,
+        thread_id: threadId,
         comment_id: commentId,
+        content: 'Reply 222',
+        date: new Date(),
+        is_deleted: false,
       });
       await CommentRepliesTableTestHelper.addCommentReply({
         id: 'reply-111',
+        user_id: userId,
+        thread_id: threadId,
         comment_id: commentId,
+        content: 'Reply 111',
+        date: new Date(),
+        is_deleted: false,
       });
 
       const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
@@ -163,6 +187,35 @@ describe('CommentReplyRepositoryPostgres', () => {
         );
 
       expect(comments).toHaveLength(3);
+      expect(comments).toEqual([
+        {
+          id: 'reply-333',
+          user_id: userId,
+          thread_id: threadId,
+          comment_id: commentId,
+          content: 'Reply 333',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+        {
+          id: 'reply-222',
+          user_id: userId,
+          thread_id: threadId,
+          comment_id: commentId,
+          content: 'Reply 222',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+        {
+          id: 'reply-111',
+          user_id: userId,
+          thread_id: threadId,
+          comment_id: commentId,
+          content: 'Reply 111',
+          created_at: expect.any(Date),
+          is_delete: false,
+        },
+      ]);
     });
   });
 

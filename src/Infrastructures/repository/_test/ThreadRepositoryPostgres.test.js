@@ -78,15 +78,25 @@ describe('ThreadRepositoryPostgres', () => {
     });
 
     it('should get the right thread', async () => {
-      await ThreadsTableTestHelper.addThread({
+      const expectedThread = {
         id: 'thread-521',
         title: 'Thread test',
-      });
+        body: 'Body of the thread',
+        created_at: new Date(),
+        user_id: userId,
+      };
+
+      await ThreadsTableTestHelper.addThread(expectedThread);
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
       const thread = await threadRepositoryPostgres.getThreadById('thread-521');
 
-      expect(thread.title).toEqual('Thread test');
+      expect(thread).toBeDefined();
+      expect(thread.id).toEqual(expectedThread.id);
+      expect(thread.title).toEqual(expectedThread.title);
+      expect(thread.body).toEqual(expectedThread.body);
+      expect(thread.created_at).toEqual(expectedThread.created_at);
+      expect(thread.user_id).toEqual(expectedThread.user_id);
     });
   });
 
