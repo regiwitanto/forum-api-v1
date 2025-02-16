@@ -1,4 +1,5 @@
 const NewCommentReply = require('../../../Domains/comment_replies/entities/NewCommentReply');
+const AddedCommentReply = require('../../../Domains/comment_replies/entities/AddedCommentReply');
 
 class AddCommentReplyUseCase {
   constructor({
@@ -23,15 +24,18 @@ class AddCommentReplyUseCase {
     const comment = await this._commentRepository.getCommentById(
       useCaseCommentId
     );
-    const thread = await this._threadRepository.getThreadById(useCaseThreadId);
+    await this._threadRepository.verifyThreadAvailability(useCaseThreadId);
     const user = await this._userRepository.getUserById(useCaseCredential);
 
-    return await this._commentReplyRepository.addCommentReply(
-      content,
-      thread.id,
-      comment.id,
-      user.id
-    );
+    const addedCommentReplyData =
+      await this._commentReplyRepository.addCommentReply(
+        content,
+        useCaseThreadId,
+        comment.id,
+        user.id
+      );
+
+    return new AddedCommentReply(addedCommentReplyData);
   }
 }
 

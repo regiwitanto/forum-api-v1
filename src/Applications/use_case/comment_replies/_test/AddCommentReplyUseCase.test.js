@@ -13,7 +13,7 @@ describe('AddCommentReplyUseCase', () => {
     const thread = { id: 'thread-123' };
     const comment = { id: 'comment-123' };
 
-    const addedReply = new AddedCommentReply({
+    const expectedAddedReply = new AddedCommentReply({
       id: 'reply-123',
       content: replyContent.content,
       owner: user.id,
@@ -24,10 +24,22 @@ describe('AddCommentReplyUseCase', () => {
     const threadRepo = new ThreadRepository();
     const userRepo = new UserRepository();
 
-    commentRepo.getCommentById = jest.fn().mockImplementation(() => Promise.resolve(comment));
-    threadRepo.getThreadById = jest.fn().mockImplementation(() => Promise.resolve(thread))
-    userRepo.getUserById = jest.fn().mockImplementation(() => Promise.resolve(user));
-    commentReplyRepo.addCommentReply = jest.fn().mockImplementation(() => Promise.resolve(addedReply));
+    commentRepo.getCommentById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(comment));
+    threadRepo.verifyThreadAvailability = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
+    userRepo.getUserById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(user));
+    commentReplyRepo.addCommentReply = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        id: 'reply-123',
+        content: replyContent.content,
+        owner: user.id,
+      })
+    );
 
     const addReplyUseCase = new AddCommentReplyUseCase({
       commentReplyRepository: commentReplyRepo,
@@ -43,15 +55,8 @@ describe('AddCommentReplyUseCase', () => {
       user.id
     );
 
-    expect(addedCommentReply).toStrictEqual(
-      new AddedCommentReply({
-        id: 'reply-123',
-        content: replyContent.content,
-        owner: user.id,
-      })
-    );
-
-    expect(threadRepo.getThreadById).toBeCalledWith(thread.id);
+    expect(addedCommentReply).toStrictEqual(expectedAddedReply);
+    expect(threadRepo.verifyThreadAvailability).toBeCalledWith(thread.id);
     expect(userRepo.getUserById).toBeCalledWith(user.id);
     expect(commentReplyRepo.addCommentReply).toBeCalledWith(
       new NewCommentReply({ content: replyContent.content }).content,

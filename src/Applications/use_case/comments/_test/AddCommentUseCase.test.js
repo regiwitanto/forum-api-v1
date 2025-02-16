@@ -11,7 +11,7 @@ describe('AddCommentUseCase', () => {
     const user = { id: 'user-123' };
     const thread = { id: 'thread-123' };
 
-    const addedCommentData = new AddedComment({
+    const expectedAddedComment = new AddedComment({
       id: 'comment-123',
       content: commentContent.content,
       owner: user.id,
@@ -21,9 +21,19 @@ describe('AddCommentUseCase', () => {
     const threadRepo = new ThreadRepository();
     const userRepo = new UserRepository();
 
-    threadRepo.getThreadById = jest.fn().mockImplementation(() => Promise.resolve(thread));
-    userRepo.getUserById = jest.fn().mockImplementation(() => Promise.resolve(user));
-    commentRepo.addComment = jest.fn().mockImplementation(() => Promise.resolve(addedCommentData));
+    threadRepo.verifyThreadAvailability = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve());
+    userRepo.getUserById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(user));
+    commentRepo.addComment = jest.fn().mockImplementation(() =>
+      Promise.resolve({
+        id: 'comment-123',
+        content: commentContent.content,
+        owner: user.id,
+      })
+    );
 
     const addCommentUseCase = new AddCommentUseCase({
       commentRepository: commentRepo,
@@ -37,15 +47,8 @@ describe('AddCommentUseCase', () => {
       user.id
     );
 
-    expect(addedComment).toStrictEqual(
-      new AddedComment({
-        id: 'comment-123',
-        content: commentContent.content,
-        owner: user.id,
-      })
-    );
-
-    expect(threadRepo.getThreadById).toBeCalledWith(thread.id);
+    expect(addedComment).toStrictEqual(expectedAddedComment);
+    expect(threadRepo.verifyThreadAvailability).toBeCalledWith(thread.id);
     expect(userRepo.getUserById).toBeCalledWith(user.id);
     expect(commentRepo.addComment).toBeCalledWith(
       new NewComment({ content: commentContent.content }).content,
