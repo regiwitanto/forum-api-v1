@@ -107,7 +107,7 @@ describe('CommentReplyRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
         comment_id: commentId,
-        is_delete: false,
+        is_deleted: false,
       };
 
       await CommentRepliesTableTestHelper.addCommentReply(expectedCommentReply);
@@ -127,7 +127,7 @@ describe('CommentReplyRepositoryPostgres', () => {
       expect(comment.user_id).toEqual(userId);
       expect(comment.thread_id).toEqual(threadId);
       expect(comment.comment_id).toEqual(commentId);
-      expect(comment.is_delete).toEqual(expectedCommentReply.is_delete);
+      expect(comment.is_deleted).toEqual(expectedCommentReply.is_deleted);
     });
   });
 
@@ -195,7 +195,7 @@ describe('CommentReplyRepositoryPostgres', () => {
           comment_id: commentId,
           content: 'Reply 333',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
         {
           id: 'reply-222',
@@ -204,7 +204,7 @@ describe('CommentReplyRepositoryPostgres', () => {
           comment_id: commentId,
           content: 'Reply 222',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
         {
           id: 'reply-111',
@@ -213,7 +213,7 @@ describe('CommentReplyRepositoryPostgres', () => {
           comment_id: commentId,
           content: 'Reply 111',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
       ]);
     });
@@ -226,7 +226,7 @@ describe('CommentReplyRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
         comment_id: commentId,
-        is_delete: false,
+        is_deleted: false,
       });
       const commentReplyRepositoryPostgres = new CommentReplyRepositoryPostgres(
         pool,
@@ -242,7 +242,7 @@ describe('CommentReplyRepositoryPostgres', () => {
       const deletedCommentReply =
         await CommentRepliesTableTestHelper.getCommentReplyById('reply-333');
 
-      expect(deletedCommentReply[0].is_delete).toEqual(true);
+      expect(deletedCommentReply[0].is_deleted).toEqual(true);
       expect(deletedCommentReply[0].content).toEqual('This is a reply');
     });
 

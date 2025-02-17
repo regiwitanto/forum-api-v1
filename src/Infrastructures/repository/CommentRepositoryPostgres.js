@@ -13,11 +13,11 @@ class CommentRepositoryPostgres extends CommentRepository {
   async addComment(commentContent, threadId, ownerId) {
     const id = `comment-${this._idGenerator()}`;
     const created_at = new Date();
-    const is_delete = false;
+    const is_deleted = false;
 
     const query = {
       text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) Returning id, content, user_id',
-      values: [id, commentContent, created_at, ownerId, threadId, is_delete],
+      values: [id, commentContent, created_at, ownerId, threadId, is_deleted],
     };
 
     const result = await this._pool.query(query);
@@ -63,7 +63,7 @@ class CommentRepositoryPostgres extends CommentRepository {
 
   async deleteComment(commentId, threadId, ownerId) {
     const query = {
-      text: 'UPDATE comments SET is_delete = true WHERE id = $1 AND thread_id = $2 AND user_id = $3 RETURNING id',
+      text: 'UPDATE comments SET is_deleted = true WHERE id = $1 AND thread_id = $2 AND user_id = $3 RETURNING id',
       values: [commentId, threadId, ownerId],
     };
 

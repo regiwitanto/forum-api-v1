@@ -40,7 +40,9 @@ class GetDetailsThreadUseCase {
 
       const commentDetails = new CommentDetails({
         id: comment.id,
-        content: comment.content,
+        content: comment.is_deleted
+          ? '**komentar telah dihapus**'
+          : comment.content,
         date: comment.created_at.toString(),
         username: commentUsername,
         replies: [],

@@ -8,11 +8,11 @@ const CommentsTableTestHelper = {
     created_at = new Date(),
     user_id = 'user-123',
     thread_id = 'thread-123',
-    is_delete = false,
+    is_deleted = false,
   }) {
     const query = {
       text: 'INSERT INTO comments VALUES($1, $2, $3, $4, $5, $6) RETURNING id, content, user_id',
-      values: [id, content, created_at, user_id, thread_id, is_delete],
+      values: [id, content, created_at, user_id, thread_id, is_deleted],
     };
 
     await pool.query(query);

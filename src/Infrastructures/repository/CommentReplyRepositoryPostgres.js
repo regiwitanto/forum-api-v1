@@ -13,7 +13,7 @@ class CommentReplyRepositoryPostgres extends CommentReplyRepository {
   async addCommentReply(commentReplyContent, threadId, commentId, ownerId) {
     const id = `reply-${this._idGenerator()}`;
     const created_at = new Date();
-    const is_delete = false;
+    const is_deleted = false;
 
     const query = {
       text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7) Returning id, content, user_id',
@@ -24,7 +24,7 @@ class CommentReplyRepositoryPostgres extends CommentReplyRepository {
         ownerId,
         threadId,
         commentId,
-        is_delete,
+        is_deleted,
       ],
     };
 
@@ -71,7 +71,7 @@ class CommentReplyRepositoryPostgres extends CommentReplyRepository {
 
   async deleteCommentReply(commentReplyId, threadId, commentId, ownerId) {
     const query = {
-      text: 'UPDATE comment_replies SET is_delete = true WHERE id = $1 AND thread_id = $2 AND user_id = $3 AND comment_id = $4 RETURNING id',
+      text: 'UPDATE comment_replies SET is_deleted = true WHERE id = $1 AND thread_id = $2 AND user_id = $3 AND comment_id = $4 RETURNING id',
       values: [commentReplyId, threadId, ownerId, commentId],
     };
 

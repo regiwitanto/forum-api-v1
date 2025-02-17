@@ -99,7 +99,7 @@ describe('CommentRepositoryPostgres', () => {
       expect(comment.user_id).toEqual(userId);
       expect(comment.thread_id).toEqual(threadId);
       expect(comment.content).toEqual('This is a comment');
-      expect(comment.is_delete).toEqual(false);
+      expect(comment.is_deleted).toEqual(false);
     });
   });
 
@@ -111,7 +111,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: 'user-123',
         thread_id: 'thread-123',
         date: new Date(),
-        is_delete: false,
+        is_deleted: false,
       });
       await CommentsTableTestHelper.addComment({
         id: 'comment-222',
@@ -119,7 +119,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: 'user-123',
         thread_id: 'thread-123',
         date: new Date(),
-        is_delete: false,
+        is_deleted: false,
       });
       await CommentsTableTestHelper.addComment({
         id: 'comment-111',
@@ -127,7 +127,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: 'user-123',
         thread_id: 'thread-123',
         date: new Date(),
-        is_delete: false,
+        is_deleted: false,
       });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -143,7 +143,7 @@ describe('CommentRepositoryPostgres', () => {
           user_id: 'user-123',
           thread_id: 'thread-123',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
         {
           id: 'comment-222',
@@ -151,7 +151,7 @@ describe('CommentRepositoryPostgres', () => {
           user_id: 'user-123',
           thread_id: 'thread-123',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
         {
           id: 'comment-111',
@@ -159,7 +159,7 @@ describe('CommentRepositoryPostgres', () => {
           user_id: 'user-123',
           thread_id: 'thread-123',
           created_at: expect.any(Date),
-          is_delete: false,
+          is_deleted: false,
         },
       ]);
     });
@@ -183,7 +183,7 @@ describe('CommentRepositoryPostgres', () => {
         user_id: userId,
         thread_id: threadId,
         content: 'This is a comment',
-        is_delete: false,
+        is_deleted: false,
       });
       const commentRepositoryPostgres = new CommentRepositoryPostgres(pool, {});
 
@@ -196,7 +196,7 @@ describe('CommentRepositoryPostgres', () => {
         'comment-333'
       );
 
-      expect(deletedComment[0].is_delete).toEqual(true);
+      expect(deletedComment[0].is_deleted).toEqual(true);
       expect(deletedComment[0].content).toEqual('This is a comment');
     });
 

@@ -9,7 +9,7 @@ const CommentRepliesTableTestHelper = {
     user_id = 'user-123',
     thread_id = 'thread-123',
     comment_id = 'comment-123',
-    is_delete = false,
+    is_deleted = false,
   }) {
     const query = {
       text: 'INSERT INTO comment_replies VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING id, content, user_id',
@@ -20,7 +20,7 @@ const CommentRepliesTableTestHelper = {
         user_id,
         thread_id,
         comment_id,
-        is_delete,
+        is_deleted,
       ],
     };
 
