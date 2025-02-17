@@ -34,11 +34,13 @@ describe('AddCommentReplyUseCase', () => {
       .fn()
       .mockImplementation(() => Promise.resolve(user));
     commentReplyRepo.addCommentReply = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        id: 'reply-123',
-        content: replyContent.content,
-        owner: user.id,
-      })
+      Promise.resolve(
+        new AddedCommentReply({
+          id: 'reply-123',
+          content: replyContent.content,
+          owner: user.id,
+        })
+      )
     );
 
     const addReplyUseCase = new AddCommentReplyUseCase({
