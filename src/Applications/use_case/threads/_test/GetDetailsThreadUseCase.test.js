@@ -23,6 +23,7 @@ describe('GetDetailsThreadUseCase', () => {
       created_at: '2023-01-02 11:00:00',
       user_id: alice.id,
       thread_id: sampleThread.id,
+      is_deleted: false,
     },
     {
       id: 'comment-2',
@@ -30,6 +31,7 @@ describe('GetDetailsThreadUseCase', () => {
       created_at: '2023-01-02 12:00:00',
       user_id: alice.id,
       thread_id: sampleThread.id,
+      is_deleted: false,
     },
     {
       id: 'comment-3',
@@ -37,6 +39,7 @@ describe('GetDetailsThreadUseCase', () => {
       created_at: '2023-01-02 13:00:00',
       user_id: alice.id,
       thread_id: sampleThread.id,
+      is_deleted: false,
     },
   ];
 
@@ -46,28 +49,36 @@ describe('GetDetailsThreadUseCase', () => {
       content: 'First reply',
       created_at: '2023-01-03 14:00:00',
       user_id: bob.id,
+      thread_id: sampleThread.id,
       comment_id: 'comment-1',
+      is_deleted: false,
     },
     {
       id: 'reply-2',
       content: 'Second reply',
       created_at: '2023-01-03 15:00:00',
       user_id: alice.id,
+      thread_id: sampleThread.id,
       comment_id: 'comment-1',
+      is_deleted: false,
     },
     {
       id: 'reply-3',
       content: 'Third reply',
       created_at: '2023-01-03 16:00:00',
       user_id: alice.id,
+      thread_id: sampleThread.id,
       comment_id: 'comment-1',
+      is_deleted: false,
     },
     {
       id: 'reply-4',
       content: 'Fourth reply',
       created_at: '2023-01-03 17:00:00',
       user_id: alice.id,
+      thread_id: sampleThread.id,
       comment_id: 'comment-1',
+      is_deleted: false,
     },
   ];
 

@@ -11,7 +11,12 @@ describe('DeleteCommentReplyUseCase', () => {
 
     const existingReply = {
       id: replyId,
+      content: 'This is a reply',
+      created_at: new Date(),
       user_id: userId,
+      thread_id: threadId,
+      comment_id: commentId,
+      is_deleted: false,
     };
 
     const commentReplyRepo = new CommentReplyRepository();

@@ -10,7 +10,11 @@ describe('DeleteCommentUseCase', () => {
 
     const existingComment = {
       id: commentId,
+      content: 'This is a comment',
+      created_at: new Date(),
       user_id: userId,
+      thread_id: threadId,
+      is_deleted: false,
     };
 
     const commentRepo = new CommentRepository();

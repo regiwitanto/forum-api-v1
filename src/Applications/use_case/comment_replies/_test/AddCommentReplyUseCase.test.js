@@ -9,9 +9,21 @@ const CommentReplyRepository = require('../../../../Domains/comment_replies/Comm
 describe('AddCommentReplyUseCase', () => {
   it('should orchestrate the addition of a comment reply', async () => {
     const replyContent = { content: 'This is comment' };
-    const user = { id: 'user-123' };
+    const user = {
+      id: 'user-123',
+      username: 'dicoding',
+      password: 'secret',
+      fullname: 'Dicoding Indonesia',
+    };
     const thread = { id: 'thread-123' };
-    const comment = { id: 'comment-123' };
+    const comment = {
+      id: 'comment-123',
+      content: 'This is a comment',
+      created_at: new Date(),
+      user_id: 'user-123',
+      thread_id: 'thread-123',
+      is_deleted: false,
+    };
 
     const expectedAddedReply = new AddedCommentReply({
       id: 'reply-123',

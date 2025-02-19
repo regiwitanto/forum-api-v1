@@ -8,7 +8,12 @@ const AddCommentUseCase = require('../AddCommentUseCase');
 describe('AddCommentUseCase', () => {
   it('should orchestrate the addition of a comment', async () => {
     const commentContent = { content: 'This is comment' };
-    const user = { id: 'user-123' };
+    const user = {
+      id: 'user-123',
+      username: 'dicoding',
+      password: 'secret',
+      fullname: 'Dicoding Indonesia',
+    };
     const thread = { id: 'thread-123' };
 
     const expectedAddedComment = new AddedComment({
