@@ -116,11 +116,9 @@ describe('ThreadRepositoryPostgres', () => {
       });
       const threadRepositoryPostgres = new ThreadRepositoryPostgres(pool, {});
 
-      try {
-        await threadRepositoryPostgres.verifyThreadAvailability('thread-521');
-      } catch (error) {
-        expect(error).toBeNull();
-      }
+      await expect(
+        threadRepositoryPostgres.verifyThreadAvailability('thread-521')
+      ).resolves.not.toThrow();
     });
   });
 });
