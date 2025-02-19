@@ -152,6 +152,13 @@ describe('GetDetailsThreadUseCase', () => {
         expect(comment.replies).toHaveLength(0);
       }
     });
+
+    expect(threadRepo.getThreadById).toBeCalledWith(sampleThread.id);
+    expect(userRepo.getUserById).toBeCalledWith(alice.id);
+    expect(commentRepo.getCommentByThreadId).toBeCalledWith(sampleThread.id);
+    expect(commentReplyRepo.getCommentReplyByCommentId).toBeCalledWith(
+      'comment-1'
+    );
   });
 
   it('should retrieve thread details when no comments are present', async () => {
@@ -178,5 +185,8 @@ describe('GetDetailsThreadUseCase', () => {
     );
 
     expect(threadDetails.comments).toHaveLength(0);
+    expect(threadRepo.getThreadById).toBeCalledWith(sampleThread.id);
+    expect(userRepo.getUserById).toBeCalledWith(alice.id);
+    expect(commentRepo.getCommentByThreadId).toBeCalledWith(sampleThread.id);
   });
 });
