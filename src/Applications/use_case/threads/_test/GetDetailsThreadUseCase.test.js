@@ -39,7 +39,7 @@ describe('GetDetailsThreadUseCase', () => {
       created_at: '2023-01-02 13:00:00',
       user_id: alice.id,
       thread_id: sampleThread.id,
-      is_deleted: false,
+      is_deleted: true,
     },
   ];
 
@@ -131,7 +131,11 @@ describe('GetDetailsThreadUseCase', () => {
     threadDetails.comments.forEach((comment, index) => {
       const expectedComment = sampleComments[index];
       expect(comment.id).toBe(expectedComment.id);
-      expect(comment.content).toBe(expectedComment.content);
+      expect(comment.content).toBe(
+        expectedComment.is_deleted
+          ? '**komentar telah dihapus**'
+          : expectedComment.content
+      );
       expect(comment.date).toBe(expectedComment.created_at);
       expect(comment.username).toBe(alice.username);
 
@@ -141,7 +145,11 @@ describe('GetDetailsThreadUseCase', () => {
         comment.replies.forEach((reply, replyIndex) => {
           const expectedReply = sampleReplies[replyIndex];
           expect(reply.id).toBe(expectedReply.id);
-          expect(reply.content).toBe(expectedReply.content);
+          expect(reply.content).toBe(
+            expectedReply.is_deleted
+              ? '**balasan telah dihapus**'
+              : expectedReply.content
+          );
           expect(reply.date).toBe(expectedReply.created_at);
 
           const expectedUser =
@@ -188,5 +196,110 @@ describe('GetDetailsThreadUseCase', () => {
     expect(threadRepo.getThreadById).toBeCalledWith(sampleThread.id);
     expect(userRepo.getUserById).toBeCalledWith(alice.id);
     expect(commentRepo.getCommentByThreadId).toBeCalledWith(sampleThread.id);
+  });
+
+  it('should retrieve thread details with deleted comments', async () => {
+    const deletedComment = {
+      id: 'comment-4',
+      content: 'This comment is deleted',
+      created_at: '2023-01-02 14:00:00',
+      user_id: alice.id,
+      thread_id: sampleThread.id,
+      is_deleted: true,
+    };
+
+    threadRepo.getThreadById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(sampleThread));
+    userRepo.getUserById = jest.fn().mockImplementation((userId) => {
+      if (userId === alice.id) return Promise.resolve(alice);
+      if (userId === bob.id) return Promise.resolve(bob);
+    });
+    commentRepo.getCommentByThreadId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([deletedComment]));
+    commentReplyRepo.getCommentReplyByCommentId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([]));
+
+    const getDetailsThreadUseCase = new GetDetailsThreadUseCase({
+      commentReplyRepository: commentReplyRepo,
+      commentRepository: commentRepo,
+      threadRepository: threadRepo,
+      userRepository: userRepo,
+    });
+
+    const threadDetails = await getDetailsThreadUseCase.execute(
+      sampleThread.id
+    );
+
+    expect(threadDetails.comments).toHaveLength(1);
+    const comment = threadDetails.comments[0];
+    expect(comment.id).toBe(deletedComment.id);
+    expect(comment.content).toBe('**komentar telah dihapus**');
+    expect(comment.date).toBe(deletedComment.created_at);
+    expect(comment.username).toBe(alice.username);
+
+    expect(threadRepo.getThreadById).toBeCalledWith(sampleThread.id);
+    expect(userRepo.getUserById).toBeCalledWith(alice.id);
+    expect(commentRepo.getCommentByThreadId).toBeCalledWith(sampleThread.id);
+    expect(commentReplyRepo.getCommentReplyByCommentId).toBeCalledWith(
+      deletedComment.id
+    );
+  });
+
+  it('should retrieve thread details with deleted replies', async () => {
+    const deletedReply = {
+      id: 'reply-5',
+      content: 'This reply is deleted',
+      created_at: '2023-01-03 18:00:00',
+      user_id: alice.id,
+      thread_id: sampleThread.id,
+      comment_id: 'comment-1',
+      is_deleted: true,
+    };
+
+    threadRepo.getThreadById = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(sampleThread));
+    userRepo.getUserById = jest.fn().mockImplementation((userId) => {
+      if (userId === alice.id) return Promise.resolve(alice);
+      if (userId === bob.id) return Promise.resolve(bob);
+    });
+    commentRepo.getCommentByThreadId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve(sampleComments));
+    commentReplyRepo.getCommentReplyByCommentId = jest
+      .fn()
+      .mockImplementation(() => Promise.resolve([deletedReply]));
+
+    const getDetailsThreadUseCase = new GetDetailsThreadUseCase({
+      commentReplyRepository: commentReplyRepo,
+      commentRepository: commentRepo,
+      threadRepository: threadRepo,
+      userRepository: userRepo,
+    });
+
+    const threadDetails = await getDetailsThreadUseCase.execute(
+      sampleThread.id
+    );
+
+    expect(threadDetails.comments).toHaveLength(3);
+    const comment = threadDetails.comments.find(
+      (comment) => comment.id === 'comment-1'
+    );
+    expect(comment.replies).toHaveLength(1);
+    const reply = comment.replies[0];
+    expect(reply.id).toBe(deletedReply.id);
+    expect(reply.content).toBe('**balasan telah dihapus**');
+    expect(reply.date).toBe(deletedReply.created_at);
+    expect(reply.username).toBe(alice.username);
+
+    expect(threadRepo.getThreadById).toBeCalledWith(sampleThread.id);
+    expect(userRepo.getUserById).toBeCalledWith(alice.id);
+    expect(commentRepo.getCommentByThreadId).toBeCalledWith(sampleThread.id);
+    expect(commentReplyRepo.getCommentReplyByCommentId).toBeCalledWith(
+      'comment-1'
+    );
   });
 });

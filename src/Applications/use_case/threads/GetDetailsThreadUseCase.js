@@ -59,7 +59,9 @@ class GetDetailsThreadUseCase {
 
         const replyDetails = new CommentReplyDetails({
           id: reply.id,
-          content: reply.content,
+          content: reply.is_deleted
+            ? '**balasan telah dihapus**'
+            : reply.content,
           date: reply.created_at.toString(),
           username: replyUsername,
         });
